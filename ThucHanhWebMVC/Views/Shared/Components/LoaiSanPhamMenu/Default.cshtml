@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TLoaiSp>
+<div class="col-lg-3">
+	<div class="hero__categories">
+		<div class="hero__categories__all">
+			<i class="fa fa-bars"></i>
+			<span>Tất cả các phòng ban</span>
+		</div>
+		<ul>
+			@foreach (var item in Model)
+			{
+				// Đảm bảo URL được ghép đúng cách
+				var getUrl = "https://localhost:7106/api/productapi/" + item.MaLoai;
+				<li>
+					<a style="cursor:pointer" onclick="showProductByCategory('@getUrl')">@item.Loai</a>
+				</li>
+			}
+		</ul>
+	</div>
+</div>
+
+<script>
+	function showProductByCategory(getUrl) {
+		var str = '';
+		$.ajax({
+			type: 'GET',
+			url: getUrl,
+			dataType: 'json',
+			success: function (data) {
+				$.each(data, function (key, val) {
+					str += '<div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">';
+					str += '<div class="featured__item">';
+					str += '<div class="featured__item__pic set-bg" data-setbg="';
+
+					// Đường dẫn hình ảnh
+					var linkImage = "../Images_Vali/" + $.trim(val.anhDaiDien);
+					str += linkImage;
+					str += '" style="background-image: url(\'';
+					str += linkImage;
+					str += '\')">';
+
+					// Các biểu tượng tương tác
+					str += '<ul class="featured__item__pic__hover">';
+					str += '<li><a href="#"><i class="fa fa-heart"></i></a></li>';
+					str += '<li><a href="#"><i class="fa fa-retweet"></i></a></li>';
+					str += '<li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>';
+					str += '</ul></div>';
+
+					// Thông tin sản phẩm
+					str += '<div class="featured__item__text">';
+					str += '<h6><a href="/Home/ProductDetail?maSp=' + $.trim(val.tenSp) + '">';
+					str += $.trim(val.tenSp);
+					str += '</a></h6>';
+					str += '<h5>' + val.giaNhoNhat.toString() + '</h5>';
+					str += '</div></div></div>';
+				});
+				$('#displayProducts').html(str);
+			},
+
+			// Sửa lỗi phần callback error
+			error: function (xhr) {
+				alert(xhr.responseText);
+			}
+		});
+	}
+</script>
