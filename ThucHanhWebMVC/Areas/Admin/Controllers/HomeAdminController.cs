@@ -136,12 +136,11 @@ namespace ThucHanhWebMVC.Areas.Admin.Controllers
             return View(user);
         }
 
-        // Edit User - GET
-        [Route("SuaNguoiDung")]
+        [Route("SuaNguoiDung/{userName}")]
         [HttpGet]
-        public IActionResult SuaNguoiDung(string id)
+        public IActionResult SuaNguoiDung(string userName) 
         {
-            var user = db.TUsers.Find(id);
+            var user = db.TUsers.Find(userName);
             if (user == null)
             {
                 return NotFound();
@@ -149,7 +148,6 @@ namespace ThucHanhWebMVC.Areas.Admin.Controllers
             return View(user);
         }
 
-        // Edit User - POST
         [Route("SuaNguoiDung")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -159,38 +157,25 @@ namespace ThucHanhWebMVC.Areas.Admin.Controllers
             {
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("DanhSachNguoiDung");
+                return RedirectToAction("DanhSachNguoiDung"); 
             }
-            return View(user);
+            return View(user); 
         }
-
-        // Delete User - GET
-        [Route("XoaNguoiDung")]
+        [Route("XoaNguoiDung/{userName}")]
         [HttpGet]
-        public IActionResult XoaNguoiDung(string id)
+        public IActionResult XoaNguoiDung(string userName) 
         {
-            var user = db.TUsers.Find(id);
+            var user = db.TUsers.Find(userName);
             if (user == null)
             {
-                return NotFound();
+                TempData["Message"] = "Không tìm thấy người dùng.";
+                return RedirectToAction("DanhSachNguoiDung");
             }
-            return View(user);
-        }
-
-        // Delete User - POST
-        [Route("XoaNguoiDung")]
-        [HttpPost, ActionName("XoaNguoiDung")]
-        [ValidateAntiForgeryToken]
-        public IActionResult XacNhanXoaNguoiDung(string id)
-        {
-            var user = db.TUsers.Find(id);
-            if (user != null)
-            {
-                db.TUsers.Remove(user);
-                db.SaveChanges();
-                TempData["Message"] = "Người dùng đã được xóa thành công";
-            }
+            db.TUsers.Remove(user);
+            db.SaveChanges();
+            TempData["Message"] = "Đã xóa thành công";
             return RedirectToAction("DanhSachNguoiDung");
         }
+
     }
 }
