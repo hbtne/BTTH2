@@ -1,0 +1,49 @@
+﻿@model IEnumerable<ThucHanhWebMVC.Models.TUser>
+@using ThucHanhWebMVC.Models
+@using X.PagedList.Mvc.Core;
+@{
+    ViewData["Title"] = "DanhSachNguoiDung";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h1>Danh sách người dùng </h1>
+
+<p>
+    <a asp-action="ThemNguoiDungMoi">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoaiUser)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+             <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoaiUser)
+            </td>
+                <td>
+                    <a asp-action="SuaNguoiDung" asp-route-maSp="@item.Username">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Username">Details</a> |
+                    <a asp-action="XoaNguoiDung" asp-route-maSp="@item.Username">Delete</a>
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

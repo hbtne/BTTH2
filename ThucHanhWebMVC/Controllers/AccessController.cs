@@ -43,5 +43,44 @@ namespace ThucHanhWebMVC.Controllers
 			HttpContext.Session.Remove("UserName");
 			return RedirectToAction("Login", "Access");
 		}
-	}
+        [HttpGet]
+        public IActionResult Register()
+        {
+            if (HttpContext.Session.GetString("UserName") == null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        // Register POST
+        [HttpPost]
+        public IActionResult Register(TUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                // Check if the username already exists
+                var existingUser = db.TUsers.FirstOrDefault(x => x.Username == user.Username);
+                if (existingUser == null)
+                {
+                    // Add new user to the database
+                    db.TUsers.Add(user);
+                    db.SaveChanges();
+
+                    // Set session and redirect
+                    HttpContext.Session.SetString("UserName", user.Username);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    // Show error message if username is taken
+                    ModelState.AddModelError("Username", "Username already exists.");
+                }
+            }
+            return View(user);
+        }
+    }
 }

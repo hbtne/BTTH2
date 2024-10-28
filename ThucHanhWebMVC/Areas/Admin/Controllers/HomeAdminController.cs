@@ -103,5 +103,94 @@ namespace ThucHanhWebMVC.Areas.Admin.Controllers
 			TempData["Message"] = "Đã xóa thành công";
 			return RedirectToAction("DanhMucSanPham", "HomeAdmin");
 		}
-	}
+        [Route("DanhSachNguoiDung")]
+        public IActionResult DanhSachNguoiDung(int? page)
+        {
+            int pageSize = 10;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            var users = db.TUsers.AsNoTracking().OrderBy(x => x.Username);
+            PagedList<TUser> pagedUsers = new PagedList<TUser>(users, pageNumber, pageSize);
+            return View(pagedUsers);
+        }
+
+        // Create User - GET
+        [Route("ThemNguoiDungMoi")]
+        [HttpGet]
+        public IActionResult ThemNguoiDungMoi()
+        {
+            return View();
+        }
+
+        // Create User - POST
+        [Route("ThemNguoiDungMoi")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ThemNguoiDungMoi(TUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.TUsers.Add(user);
+                db.SaveChanges();
+                return RedirectToAction("DanhSachNguoiDung");
+            }
+            return View(user);
+        }
+
+        // Edit User - GET
+        [Route("SuaNguoiDung")]
+        [HttpGet]
+        public IActionResult SuaNguoiDung(string id)
+        {
+            var user = db.TUsers.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        // Edit User - POST
+        [Route("SuaNguoiDung")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SuaNguoiDung(TUser user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("DanhSachNguoiDung");
+            }
+            return View(user);
+        }
+
+        // Delete User - GET
+        [Route("XoaNguoiDung")]
+        [HttpGet]
+        public IActionResult XoaNguoiDung(string id)
+        {
+            var user = db.TUsers.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        // Delete User - POST
+        [Route("XoaNguoiDung")]
+        [HttpPost, ActionName("XoaNguoiDung")]
+        [ValidateAntiForgeryToken]
+        public IActionResult XacNhanXoaNguoiDung(string id)
+        {
+            var user = db.TUsers.Find(id);
+            if (user != null)
+            {
+                db.TUsers.Remove(user);
+                db.SaveChanges();
+                TempData["Message"] = "Người dùng đã được xóa thành công";
+            }
+            return RedirectToAction("DanhSachNguoiDung");
+        }
+    }
 }
