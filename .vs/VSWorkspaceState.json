@@ -1,6 +1,15 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\ThucHanhWebMVC",
+    "\\ThucHanhWebMVC\\Properties",
+    "\\ThucHanhWebMVC\\Repository",
+    "\\ThucHanhWebMVC\\ViewModels",
+    "\\ThucHanhWebMVC\\Views",
+    "\\ThucHanhWebMVC\\Views\\Home",
+    "\\ThucHanhWebMVC\\Views\\Shared",
+    "\\ThucHanhWebMVC\\Views\\Shared\\Components",
+    "\\ThucHanhWebMVC\\Views\\Shared\\Components\\LoaiSanPhamMenu"
   ],
   "SelectedNode": "\\ThucHanhWebMVC.sln",
   "PreviewInSolutionExplorer": false
